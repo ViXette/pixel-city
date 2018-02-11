@@ -13,7 +13,12 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
 	let authStatus = CLLocationManager.authorizationStatus()
 	let regionRadius = 1000.0
 	
+	var spinner: UIActivityIndicatorView?
+	var progress_label: UILabel?
+	
 	@IBOutlet weak var mapView: MKMapView!
+	@IBOutlet weak var mapViewBottomConstraint: NSLayoutConstraint!
+	@IBOutlet weak var pullUpView: UIView!
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -34,6 +39,47 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
 		doubleTapGestureRecognizer.delegate = self
 		
 		mapView.addGestureRecognizer(doubleTapGestureRecognizer)
+	}
+	
+	
+	func addSwipeGestureResognizer () {
+		let swipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(animateViewDown))
+		swipeGestureRecognizer.direction = .down
+		
+		pullUpView.addGestureRecognizer(swipeGestureRecognizer)
+	}
+	
+	
+	func animateViewUp () {
+		mapViewBottomConstraint.constant = 300
+		
+		UIView.animate(withDuration: 0.3) {
+			self.view.layoutIfNeeded()
+		}
+	}
+	
+	
+	@objc func animateViewDown () {
+		mapViewBottomConstraint.constant = 0
+		
+		UIView.animate(withDuration: 0.3) {
+			self.view.layoutIfNeeded()
+		}
+	}
+	
+	
+	func addSpinner () {
+		spinner = UIActivityIndicatorView()
+		spinner?.center = CGPoint(
+			x: (UIScreen.main.bounds.width / 2) - ((spinner?.frame.width)! / 2),
+			y: (pullUpView.bounds.height / 2) - ((spinner?.frame.height)! / 2)
+		)
+		spinner?.activityIndicatorViewStyle = .whiteLarge
+		spinner?.color = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+		
+		spinner?.startAnimating()
+		
+		pullUpView.addSubview(spinner!)
 	}
 	
 	
@@ -83,6 +129,10 @@ extension MapVC: MKMapViewDelegate {
 		
 		mapView.removeAnnotations(mapView.annotations)
 		mapView.addAnnotation(annotation)
+		
+		animateViewUp()
+		addSwipeGestureResognizer()
+		addSpinner()
 		
 		mapView.setRegion(MKCoordinateRegionMakeWithDistance(touchCoordinate, regionRadius, regionRadius), animated: true)
 	}

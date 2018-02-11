@@ -62,25 +62,27 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="h0d-3u-t14" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="3zg-nc-Ch9"/>
+                            <constraint firstItem="h0d-3u-t14" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="5eY-Y8-GFB"/>
                             <constraint firstItem="L9c-Ve-1Xm" firstAttribute="top" secondItem="h0d-3u-t14" secondAttribute="bottom" id="ABu-Zy-ssF"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="h0d-3u-t14" secondAttribute="bottom" id="AFj-UN-cSa"/>
+                            <constraint firstItem="L9c-Ve-1Xm" firstAttribute="bottom" secondItem="h0d-3u-t14" secondAttribute="bottom" id="AFj-UN-cSa"/>
                             <constraint firstItem="7OY-8o-4O8" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="BVN-Ij-e6i"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="h0d-3u-t14" secondAttribute="trailing" id="LQw-DH-YIw"/>
                             <constraint firstItem="L9c-Ve-1Xm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Q2Q-0F-9ib"/>
-                            <constraint firstItem="h0d-3u-t14" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Xr5-C9-c0b"/>
                             <constraint firstItem="L9c-Ve-1Xm" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="YC5-B5-TeV"/>
                             <constraint firstItem="7OY-8o-4O8" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="fY8-T7-7ag"/>
                             <constraint firstItem="uIy-gR-rz5" firstAttribute="width" secondItem="h0d-3u-t14" secondAttribute="width" multiplier="1/7" id="m6T-h0-e80"/>
-                            <constraint firstItem="7OY-8o-4O8" firstAttribute="height" secondItem="h0d-3u-t14" secondAttribute="height" multiplier="1/10" id="pa9-kW-q9z"/>
+                            <constraint firstItem="7OY-8o-4O8" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="1/10" id="pa9-kW-q9z"/>
                             <constraint firstItem="L9c-Ve-1Xm" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="s6m-VX-CrC"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="uIy-gR-rz5" secondAttribute="bottom" constant="15" id="typ-py-AxF"/>
+                            <constraint firstItem="L9c-Ve-1Xm" firstAttribute="top" secondItem="uIy-gR-rz5" secondAttribute="bottom" constant="15" id="typ-py-AxF"/>
                             <constraint firstItem="7OY-8o-4O8" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="w3r-go-BYW"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="uIy-gR-rz5" secondAttribute="trailing" constant="15" id="xjz-GH-BgW"/>
+                            <constraint firstAttribute="trailing" secondItem="h0d-3u-t14" secondAttribute="trailing" id="zHZ-32-KpG"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="mapView" destination="h0d-3u-t14" id="PF5-WB-7eD"/>
+                        <outlet property="mapViewBottomConstraint" destination="AFj-UN-cSa" id="vEJ-rc-Ddv"/>
+                        <outlet property="pullUpView" destination="L9c-Ve-1Xm" id="sqf-yX-VLz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
