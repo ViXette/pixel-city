@@ -15,6 +15,8 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
 	
 	var spinner: UIActivityIndicatorView?
 	var progress_label: UILabel?
+	var collectionViewFlowLayout = UICollectionViewFlowLayout()
+	var collectionView: UICollectionView?
 	
 	@IBOutlet weak var mapView: MKMapView!
 	@IBOutlet weak var mapViewBottomConstraint: NSLayoutConstraint!
@@ -30,6 +32,14 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
 		mapView.delegate = self
 		
 		addDoubleTapGestureRecognizer()
+		
+		collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: collectionViewFlowLayout)
+		collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: "photoCell")
+		collectionView?.delegate = self
+		collectionView?.dataSource = self
+		collectionView?.backgroundColor = #colorLiteral(red: 0.9771530032, green: 0.7062081099, blue: 0.1748393774, alpha: 1)
+		
+		pullUpView.addSubview(collectionView!)
 	}
 	
 	
@@ -69,6 +79,8 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
 	
 	
 	func addSpinner () {
+		guard spinner == nil else { return }
+		
 		spinner = UIActivityIndicatorView()
 		spinner?.center = CGPoint(
 			x: (UIScreen.main.bounds.width / 2) - ((spinner?.frame.width)! / 2),
@@ -76,10 +88,45 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
 		)
 		spinner?.activityIndicatorViewStyle = .whiteLarge
 		spinner?.color = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-		
+
 		spinner?.startAnimating()
+
+		collectionView?.addSubview(spinner!)
+	}
+	
+	
+	func removeSpinner () {
+		if spinner != nil {
+			spinner?.removeFromSuperview()
+		}
+	}
+	
+	
+	func addProgressLabel () {
+		guard progress_label == nil else { return }
 		
-		pullUpView.addSubview(spinner!)
+		progress_label = UILabel()
+		
+		let labelWidth: CGFloat = 250
+		
+		progress_label?.frame = CGRect(
+			x: (UIScreen.main.bounds.width / 2) - (labelWidth / 2),
+			y: pullUpView.bounds.height / 4 * 3,
+			width: labelWidth,
+			height: 40
+		)
+		progress_label?.font = UIFont(name: "Avenir Next", size: 18)
+		progress_label?.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+		progress_label?.textAlignment = .center
+		
+		collectionView?.addSubview(progress_label!)
+	}
+	
+	
+	func removeProgressLabel () {
+		if progress_label != nil {
+			progress_label?.removeFromSuperview()
+		}
 	}
 	
 	
@@ -133,8 +180,10 @@ extension MapVC: MKMapViewDelegate {
 		animateViewUp()
 		addSwipeGestureResognizer()
 		addSpinner()
+		addProgressLabel()
 		
 		mapView.setRegion(MKCoordinateRegionMakeWithDistance(touchCoordinate, regionRadius, regionRadius), animated: true)
+		print("A P I " + makeFlickrUrl(forApiKey: API_KEY, withAnnotation: annotation, andNumberOfPhotos: 40))
 	}
 	
 	
@@ -148,6 +197,28 @@ extension MapVC: MKMapViewDelegate {
 		pinAnnotation.animatesDrop = true
 		
 		return pinAnnotation
+	}
+	
+}
+
+
+
+extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
+	
+	func numberOfSections(in collectionView: UICollectionView) -> Int {
+		return 1
+	}
+	
+	
+	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+		return 4
+	}
+	
+	
+	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+		let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCell
+		
+		return cell!
 	}
 	
 }
