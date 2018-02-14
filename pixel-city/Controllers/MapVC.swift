@@ -5,6 +5,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Alamofire
 
 
 class MapVC: UIViewController, UIGestureRecognizerDelegate {
@@ -12,6 +13,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
 	let locationManager = CLLocationManager()
 	let authStatus = CLLocationManager.authorizationStatus()
 	let regionRadius = 1000.0
+	var imageUrls = [String]()
 	
 	var spinner: UIActivityIndicatorView?
 	var progress_label: UILabel?
@@ -135,6 +137,29 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
 			centerMapOnUserLocation()
 		}
 	}
+	
+	
+	func retrieveUrls (forAnnotation annotation: DroppablePin, handler: @escaping (_ status: Bool) -> ()) {
+		imageUrls = []
+
+		Alamofire.request(makeFlickrUrl(forApiKey: API_KEY, withAnnotation: annotation, andNumberOfPhotos: 40))
+			.responseJSON { response in
+				guard let json = response.result.value as? Dictionary<String, AnyObject> else { return }
+
+				let photosDictionary = json["photos"] as! Dictionary<String, AnyObject>
+				let photos = photosDictionary["photo"] as! [Dictionary<String, AnyObject>]
+
+				for photo in photos {
+					let postUrl = "https://farm\(photo["farm"]!).staticflickr.com/\(photo["server"]!)/\(photo["id"]!)_\(photo["secret"]!)_h_d.jpg"
+
+					self.imageUrls.append(postUrl)
+				}
+
+				print(self.imageUrls)
+
+				handler(true)
+			}
+	}
 
 }
 
@@ -183,7 +208,8 @@ extension MapVC: MKMapViewDelegate {
 		addProgressLabel()
 		
 		mapView.setRegion(MKCoordinateRegionMakeWithDistance(touchCoordinate, regionRadius, regionRadius), animated: true)
-		print("A P I " + makeFlickrUrl(forApiKey: API_KEY, withAnnotation: annotation, andNumberOfPhotos: 40))
+		
+		retrieveUrls(forAnnotation: annotation) { status in  }
 	}
 	
 	
